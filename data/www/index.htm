@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width = device-width, initial-scale = 1">
+  <link rel="stylesheet" type="text/css" href="jq.m-1.4.5.css">
+  <style type='text/css'>
+    @media only screen and (min-width: 500px){
+      .ui-page {
+        width: 500px !important;
+          margin: 0 auto !important;
+          position: relative !important;
+        }
+    }
+    tr:hover{
+      background-color: #e9e9e9;
+    }
+    #mkdev-popup-popup {
+      width: 70%;
+      left: auto;
+      right: 0;
+    }
+    #device-popup-popup {
+      width: 70%;
+      left: auto;
+      right: 0;
+    }
+  </style>
+  <script src="jq.js"></script>
+  <script src="jq.m-1.4.5.js"></script>
+</head>
+<body>
+<div data-role="page" id="main-page" data-quicklinks="true">
+<div data-role="header">
+  <h1>ESP MultiDriver</h1>
+</div>
+<div data-role="content" class="ui-mini" style="height: 100vh;">
+  <ul data-role="listview" data-inset="true">
+    <li><a href="#informations-page">Informations</a></li>
+    <li><a href="#devices-page">Devices</a></li>
+    <li><a href="#restart-page">Restart</a></li>
+  </ul>
+  <div style="text-align:right;font-size:11px;color:#aaa;">
+    <hr>
+    <div>ESP MultiDriver by Adrian Brzeziński</div>
+  </div>
+</div>
+</div>
+
+<div data-role="page" id="informations-page" data-cache="false">
+  <div data-role="header">
+    <a href="#" data-rel="back" data-direction="reverse" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left ui-btn-a">Back</a>
+    <a href="#informations-page" name="refresh-page" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left ui-btn-a">Refresh</a>
+    <h1>Informations</h1>
+  </div>
+  <div data-role="content" class="ui-mini" style="height: 100vh;">
+
+    <form>
+      <input id="infofilter-input" data-type="search">
+    </form>
+    <table id="info-table" data-role="table" data-filter="true" data-input="#infofilter-input" class="ui-responsive table-stroke">
+    <thead><tr>
+      <th data-priority="critical">Name</th>
+      <th data-priority="1">Value</th>
+    </tr></thead>
+    <tbody>
+    </tbody>
+    </table>
+
+    <div style="text-align:right;font-size:11px;color:#aaa;">
+      <hr>
+      <div>ESP MultiDriver by Adrian Brzeziński</div>
+    </div>
+  </div>
+</div>
+
+<div data-role="page" id="devices-page" data-cache="false">
+  <div data-role="header">
+    <a href="#" data-rel="back" data-direction="reverse" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left ui-btn-a">Back</a>
+    <a href="#devices-page" name="refresh-page" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left ui-btn-a">Refresh</a>
+    <h1>Devices</h1>
+  </div>
+  <div data-role="content" class="ui-mini" style="height: 100vh;">
+
+    <button id="mkdev-popup-btn" data-rel="popup" data-transition="fade" data-position-to="window"
+    class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-left ui-btn-a ui-alt-icon ui-nodisc-icon">Create device</button>
+
+    <form>
+      <input id="devicesfilter-input" data-type="search">
+    </form>
+    <table id="devices-table" data-role="table" data-filter="true" data-input="#devicesfilter-input" class="ui-responsive table-stroke">
+    <thead><tr>
+      <th data-priority="critical">Name</th>
+      <th data-priority="2">Driver</th>
+      <th data-priority="3">Status</th>
+      <th data-priority="4">Actions</th>
+    </tr></thead>
+    <tbody>
+    </tbody>
+    </table>
+
+    <div style="text-align:right;font-size:11px;color:#aaa;">
+      <hr>
+      <div>ESP MultiDriver by Adrian Brzeziński</div>
+    </div>
+
+    <!-- create device popup -->
+    <div data-role="popup" id="mkdev-popup" style="z-index:9999;" data-history="false" class="ui-mini ui-shadow" data-theme="a">
+      <ul data-role="listview">
+      </ul>
+
+      <fieldset class="ui-grid-a" data-inset="false">
+        <div class="ui-block-a">
+          <button id="mkdev" type="submit" class="ui-btn ui-shadow ui-corner-all ui-btn-b">Create</button>
+        </div>
+        <div class="ui-block-b">
+          <button id="mkdev-back-btn" type="submit" class="ui-btn ui-shadow ui-corner-all ui-btn-a">Back</button>
+        </div>
+      </fieldset>
+    </div>
+    <!-- popup end -->
+
+    <!-- device properties popup -->
+    <div data-role="popup" id="device-popup" style="z-index:9999;" data-history="false" class="ui-mini ui-shadow" data-theme="a">
+      <ul data-role="listview">
+      </ul>
+
+      <fieldset class="ui-grid-a" data-inset="false">
+        <div class="ui-block-a">
+          <button id="set_params" type="submit" class="ui-btn ui-shadow ui-corner-all ui-btn-b">Save</button>
+        </div>
+        <div class="ui-block-b">
+          <button id="device-back-btn" type="submit" class="ui-btn ui-shadow ui-corner-all ui-btn-a">Back</a>
+        </div>
+      </fieldset>
+    </div>
+    <!-- popup end -->
+
+  </div>
+</div>
+
+<div data-role="page" id="restart-page">
+  <div data-role="header">
+    <h1>Restart</h1>
+  </div>
+  <div data-role="content" class="ui-mini">
+    <p>Restarting...</p>
+    <div style="text-align:right;font-size:11px;color:#aaa;">
+      <hr>
+      <div>ESP MultiDriver by Adrian Brzeziński</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function refreshPage() {
+  jQuery.mobile.changePage(window.location.href, {
+    allowSamePageTransition: true,
+    transition: 'pop',
+    reload: true
+  });
+}
+
+function PopulateInfoTable(infolist) {
+
+ var infoTableBody = "";
+
+ for ( info in infolist ) {
+
+	  infoTableBody += `
+<tr style="height:3em;">
+  <td style="vertical-align:middle;">` + info + `</td>
+  <td style="vertical-align:middle;">` + infolist[info] + `</td>
+</tr>`;
+ }
+
+ $("table#info-table tbody")
+   .html(infoTableBody)
+   .closest("table#info-table")
+   .table("refresh")
+   .trigger("create");
+}
+
+function RefreshInfoTable() {
+  $.ajax({
+    url: "/api",
+    type: "POST",
+    data: JSON.stringify({"event":"info","device":"kernel","params":{}}),
+    dataType: "json",
+    contentType: "application/json",
+    async: 'false',
+    error: function (request, error) {
+      alert('An error occurred, please reload page!');
+    },
+    success: function(result) {
+      console.log("info: "+JSON.stringify(result));
+      PopulateInfoTable(result);
+    }
+  });
+}
+
+function PopulateCreateDevicePopup(drivers) {
+  var deviceTypes = `
+<li data-role="list-divider">Create new device:</li>
+<li>
+ <label for="mkdev-name" class="ui-mini">Name</label>
+ <input type="text" name="mkdev-name" value="" maxlength="15" data-clear-btn="true" class="ui-mini">
+</li>
+<li>
+ <label for="mkdev-driver" class="select ui-mini">Driver</label>
+ <select name="mkdev-driver" class="ui-mini">`;
+
+  var skipDrivers = ["kernel","wifista","wifiap","httpd"];   // exclude mandatory device drivers
+  for ( i in drivers['drivers'] ) {
+    var type = drivers['drivers'][i];
+    if ( skipDrivers.includes(type) ) continue;
+
+    deviceTypes += `<option value="`+type+`">`+type+`</option>`;
+  }
+
+  deviceTypes += `</select><li>`;
+
+  $("#mkdev-popup ul")
+	.html(deviceTypes)
+	.closest("#mkdev-popup ul")
+  .listview("refresh")
+  .trigger("create");
+
+  // create new device
+  $("#mkdev-popup").off("click", "#mkdev").on("click", "#mkdev", function () {
+    var name = $("[name='mkdev-name']").val();
+    var type = $("[name='mkdev-driver']").children("option:selected").val();
+
+    $.ajax({
+      url: "/api",
+      type: "POST",
+      data: JSON.stringify({"event":"mkdev","device":"kernel", "params":{"name":name,"type":type}}),
+      dataType: "json",
+      contentType: "application/json",
+      async: 'false',
+      error: function (request, error) {
+        alert('An error occurred, please try again!');
+      },
+      complete: function() {
+        $("#mkdev-popup").popup("close");
+        RefreshDevicesTable();
+      }
+    });
+  });
+
+  // open popup when user clicked on the "Create device" button
+  $(document).off("click", "#mkdev-popup-btn").on("click", "#mkdev-popup-btn", function () {
+    $("#mkdev-popup").popup("open",{ transition:"fade", positionTo: "window"});
+  });
+
+  $(document).off("click", "#mkdev-back-btn").on("click", "#mkdev-back-btn", function () {
+    $("#mkdev-popup").popup("close");
+  });
+}
+
+function RefreshCreateDevicePopup() {
+
+  // Driver types list can only change after firmware update, so we can grab it only once
+  $.ajax({
+    url: "/api",
+    type: "POST",
+    data: JSON.stringify({"event":"lsdrivers","device":"kernel","params":{}}),
+    dataType: "json",
+    contentType: "application/json",
+    async: 'false',
+    error: function (request, error) {
+      alert('An error occurred, please reload page!');
+    },
+    success: function(result) {
+      console.log("lsdrivers: "+JSON.stringify(result));
+      PopulateCreateDevicePopup(result);
+    }
+  });
+}
+
+function PopulateDevicePopup(devparams) {
+  var deviceParameters = `<li data-role="list-divider">"` + devparams["name"] + `" parameters:</li>`;
+  var immutableParams = ["name","type","state"];   // you can't change those with set_params
+
+  for ( param in devparams ) {
+    if ( param == "state" ) continue;
+
+    deviceParameters += `
+      <li>
+       <label for="`+param+`" class="ui-mini">`+param+`</label>
+       <input type="text" class="ui-mini" name="`+param+`" value="`+devparams[param]+`"`+(immutableParams.includes(param) ? "disabled" : "")+ `>
+      </li>`;
+  }
+
+  $("#device-popup ul")
+	.html(deviceParameters)
+	.closest("#device-popup ul")
+  .listview("refresh")
+  .trigger("create");
+
+  // save device parameters
+  $("#device-popup").off("click", "#set_params").on("click", "#set_params", function () {
+
+    var params = {};
+
+    $("#device-popup ul").find("input").each( function( index ) {
+      var name = $(this).attr('name');
+      var value = $(this).val();
+      //console.log( index + ":{" + name + "=" + value +"},");
+      params[name] = value;
+    });
+
+    $.ajax({
+      url: "/api",
+      type: "POST",
+      data: JSON.stringify({"event":"set_params","device":params["name"], "params": params}),
+      dataType: "text", // we don't expect any json data
+      contentType: "application/json",
+      async: 'false',
+      error: function (request, error) {
+        alert('An error occurred, please try again!');
+      },
+      complete: function() {
+        $("#device-popup").popup("close");
+        RefreshDevicesTable();
+      }
+    });
+  });
+
+  $(document).off("click", "#device-back-btn").on("click", "#device-back-btn", function () {
+    $("#device-popup").popup("close");
+  });
+}
+
+function PopulateDevicesTable(devlist) {
+
+  var zIndex = 1000;
+  var devicesTableBody = "";
+
+  for ( device in devlist ) {
+    devtype = devlist[device]['type'];
+    devstate = devlist[device]['state'];
+
+	  devicesTableBody += `
+<tr style="height:3em;">
+  <td style="vertical-align:middle;">` + device + `</td>
+  <td style="vertical-align:middle;">` + devtype + `</td>
+  <td style="vertical-align:middle;">`;
+
+   switch(devstate) {
+   case 0:
+     devicesTableBody += `running`;
+   break;
+   case 1:
+     devicesTableBody += `stopped`;
+   break;
+   case 2:
+     devicesTableBody += `disabled`;
+   break;
+   default:
+     devicesTableBody += `unknown`;
+   }
+
+   devicesTableBody += `
+</td>
+<td style="vertical-align:middle;">
+<span style="position:relative;">
+<div data-role="collapsible" class="ui-alt-icon ui-nodisc-icon" style="z-index: `+ zIndex +`; position:absolute;left:0;top:-100%;"
+data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true">
+<h5>Select action</h5>
+<ul class="ui-shadow" data-role="listview">
+<li><a id="device-properties-btn" name="` + device + `"class="ui-btn ui-btn-a ui-btn-inline ui-btn-icon-left ui-icon-gear `+(devstate == 2 ? "ui-disabled":"")+`">Properties</a></li>
+<li><a id="device-state-btn" name="` + device + `"class="ui-btn ui-btn-a ui-btn-inline ui-btn-icon-left ui-icon-carat-r `+((devstate == 0 || devstate == 2) ? "ui-disabled":"")+`">Start</a></li>
+<li><a id="device-state-btn" name="` + device + `"class="ui-btn ui-btn-a ui-btn-inline ui-btn-icon-left ui-icon-forbidden `+(devstate > 0 ? "ui-disabled":"")+`">Stop</a></li>
+<li><a id="device-state-btn" name="` + device + `"class="ui-btn ui-btn-a ui-btn-inline ui-btn-icon-left ui-icon-power `+(devstate == 2 ? "ui-disabled":"")+`">Disable</a></li>
+<li><a id="device-remove-btn" name="` + device + `"class="ui-btn ui-btn-b ui-btn-inline ui-btn-icon-left ui-icon-delete">Remove</a></li>
+</ul>
+</div>
+</span>
+</td>
+</tr>`;
+
+   zIndex--;
+ }
+
+ $("table#devices-table tbody")
+   .html(devicesTableBody)
+   .closest("table#devices-table")
+   .table("refresh")
+   .trigger("create");
+
+ // user clicked device properties - get device parameters for popup
+ $("table#devices-table").off("click", "#device-properties-btn").on("click", "#device-properties-btn", function () {
+   var name = $(this).attr('name');
+
+   $.ajax({
+     url: "/api",
+     type: "POST",
+     data: JSON.stringify({"event":"get_params", "device":name, "params":{}}),
+     dataType: "json",
+     contentType: "application/json",
+     async: 'false',
+     error: function (request, error) {
+       alert('An error occurred, please try again!');
+     },
+     success: function(result) {
+       console.log("get_params: "+JSON.stringify(result));
+       PopulateDevicePopup(result);
+       $("#device-popup").popup("open",{ transition:"fade", positionTo: "window"});
+     }
+   });
+ });
+
+ // change device state
+ $("table#devices-table").off("click", "#device-state-btn").on("click", "#device-state-btn", function () {
+   var name = $(this).attr('name');
+   var state = $(this).text().toLowerCase();
+
+   $.ajax({
+     url: "/api",
+     type: "POST",
+     data: JSON.stringify({"event":state, "device":name, "params":{}}),
+     dataType: "json",
+     contentType: "application/json",
+     async: 'false',
+     complete: function() {
+       RefreshDevicesTable();
+     }
+   });
+ });
+
+  // remove device
+  $("table#devices-table").off("click", "#device-remove-btn").on("click", "#device-remove-btn", function () {
+    var name = $(this).attr('name');
+
+    $.ajax({
+      url: "/api",
+      type: "POST",
+      data: JSON.stringify({"event":"rmdev","device":"kernel","params":{"name":name}}),
+      dataType: "text", // we don't expect any json data
+      contentType: "application/json",
+      async: 'false',
+      error: function (request, error) {
+        alert('An error occurred, please try again!');
+      },
+      complete: function() {
+        RefreshDevicesTable();
+      }
+    });
+  });
+}
+
+function RefreshDevicesTable() {
+  $.ajax({
+    url: "/api",
+    type: "POST",
+    data: JSON.stringify({"event":"lsdev","device":"kernel","params":{}}),
+    dataType: "json",
+    contentType: "application/json",
+    async: 'false',
+    error: function (request, error) {
+      alert('An error occurred, please reload page!');
+    },
+    success: function(result) {
+      console.log("lsdev: "+JSON.stringify(result));
+      PopulateDevicesTable(result);
+    }
+  });
+}
+
+$(document).on("pagebeforeshow","#informations-page", function() {
+  $(document).off("click", "[name='refresh-page']").on("click", "[name='refresh-page']", function () {
+    refreshPage();
+  });
+
+  RefreshInfoTable();
+});
+
+$(document).on("pagebeforeshow","#devices-page", function() {
+  $(document).off("click", "[name='refresh-page']").on("click", "[name='refresh-page']", function () {
+    refreshPage();
+  });
+
+  RefreshCreateDevicePopup();
+  RefreshDevicesTable();
+
+});
+
+$(document).on("pageshow","#restart-page", function() {
+  console.log("Restarting...");
+
+  // stop kernel device and redirect to main page
+  $.ajax({
+    url: "/api",
+    type: "POST",
+    data: JSON.stringify({"event":"stop", "device":"kernel", "params":{}}),
+    dataType: "text",
+    contentType: "application/json",
+    async: 'false',
+    error: function (request, error) {
+      alert('An error occurred, please try again!');
+    },
+    complete: function() {
+      $.mobile.pageContainer.pagecontainer("change", "#main-page");
+    }
+  });
+});
+
+$(document).ajaxSend(function() {
+    $.mobile.loading('show');
+});
+$(document).ajaxComplete(function() {
+    $.mobile.loading('hide');
+});
+
+</script>
+
+</body>
+</html>
