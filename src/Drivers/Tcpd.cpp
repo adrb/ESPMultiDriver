@@ -15,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "definitions.h"
+#include "ESPMultiDriver.h"
 
 void TcpdDriver::handleClientData(void* arg, AsyncClient* client, void *data, size_t len) {
 

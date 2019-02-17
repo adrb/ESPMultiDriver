@@ -15,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "definitions.h"
+#include "ESPMultiDriver.h"
 
 std::list<DriverAllocator*>::iterator Kernel::findAllocator(const char* name) {
 
