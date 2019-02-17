@@ -15,31 +15,12 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __WIFIAP_H__
-#define __WIFIAP_H__
+#include "ESPMultiDriver.h"
 
-#include "DriverEvent.h"
+PinDriver::PinDriver() {
 
-static const char WIFIAP_NAME[] = "wifiap";
-
-class WiFiAPDriver : public Driver {
-
-  unsigned long ledTimer;
-
-  friend class DriverAllocator;
-  WiFiAPDriver(); // only DriverAllocator can create driver object
-public:
-  class Allocator : public DriverAllocator {
-    Driver* allocate() { return new WiFiAPDriver; }
-  public:
-    const char* driverName() override final { return WIFIAP_NAME; }
-  };
-  ~WiFiAPDriver() {};
-
-  bool begin();
-  bool run();
-  void end();
-
-};
-
-#endif
+  // initialize driver parameters
+  params.set("pin", "0");
+  params.set("digital", "1");
+  params.set("output", "1");
+}

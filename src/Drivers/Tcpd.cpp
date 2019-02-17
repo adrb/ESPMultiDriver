@@ -56,7 +56,7 @@ void TcpdDriver::handleClientData(void* arg, AsyncClient* client, void *data, si
       }
 
     } else {
-      if( cmdIndex < sizeof(cmd) ) {
+      if( cmdIndex < (sizeof(cmd)-1) ) {
         cmd[cmdIndex++] = c;
       } else {
         // command too long

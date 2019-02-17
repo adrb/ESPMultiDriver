@@ -18,7 +18,7 @@
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
-static const char EMD_VERSION[] = "1.0.0";
+static const char EMD_VERSION[] = "1.0.1";
 
 #define DEBUG_ESP_PORT Serial
 #define DEBUG_ESP_WIFI
@@ -58,5 +58,6 @@ extern "C" {
 #include "Drivers/Httpd.h"
 #include "Drivers/Tcpd.h"
 #include "Drivers/DCMotor.h"
+#include "Drivers/Pin.h"
 
 #endif

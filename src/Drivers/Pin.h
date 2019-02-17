@@ -15,41 +15,26 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __DCMOTOR_H__
-#define __DCMOTOR_H__
+#ifndef __PIN_H__
+#define __PIN_H__
 
 #include "DriverEvent.h"
 
-#define DCMOTOR_SPEED_CHANGE_FREQ 50   // how often we can change motor speed? time in ms
+static const char PIN_NAME[] = "pin";
 
-static const char DCMOTOR_NAME[] = "dcmotor";
-
-class DCMotorDriver : public Driver {
+class PinDriver : public Driver {
   friend class DriverAllocator;
 
-  uint8_t pin0;
-  uint8_t pin1;
-  int currentSpeed;   // negative number means rotation in opposite direction
-  unsigned long lastCmdTime;
+  uint8_t pin;
 
-  DCMotorDriver(); // only DriverAllocator can create driver object
-  void stopMotor();
-  void setSpeed(int speed);  // change current speed
-
+  PinDriver(); // only DriverAllocator can create driver object
 public:
   class Allocator : public DriverAllocator {
-    Driver* allocate() { return new DCMotorDriver; }
+    Driver* allocate() { return new PinDriver; }
   public:
-    const char* driverName() override final { return DCMOTOR_NAME; }
+    const char* driverName() override final { return PIN_NAME; }
   };
-  ~DCMotorDriver() {};
-
-  bool begin();
-  bool run();
-  void end();
-
-  bool handleEvent(DriverEventString *event);
-  bool handleEvent(DriverEventJson *event);
+  ~PinDriver() {};
 };
 
 #endif

@@ -79,7 +79,7 @@ bool WiFiAPDriver::run() {
     ledTimer = millis();
 
     // send "led_on" event to "kernel" device
-    DriverEventInt *e = new DriverEventInt(DRIVER_KERNEL_ALOCNAME, F("led_on"), 2);
+    DriverEventInt *e = new DriverEventInt(KERNEL_NAME, F("led_on"), 2);
     e->setTime(100);  // event will wait 100ms in queue
     if ( e->handle() != DriverEvent::QUEUED ) {
       DEBUG_SERIAL("Can't queue led_on event, status: %d\n", e->getStatus());

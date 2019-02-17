@@ -25,8 +25,7 @@
 
 #include "DriverEvent.h"
 
-#define DRIVER_HTTPD_ALOCNAME "httpd"
-
+static const char HTTPD_NAME[] = "httpd";
 static const char HTTPD_API_URI[] = "/api";
 
 class HttpdDriver : public Driver {
@@ -39,7 +38,7 @@ public:
   class Allocator : public DriverAllocator {
     Driver* allocate() { return new HttpdDriver; }
   public:
-    const char* name() override final { static const char* fname = DRIVER_HTTPD_ALOCNAME; return fname; }
+    const char* driverName() override final { return HTTPD_NAME; }
   };
   ~HttpdDriver() {};
 

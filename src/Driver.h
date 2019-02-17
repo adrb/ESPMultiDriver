@@ -29,7 +29,7 @@ class DriverAllocator {
   friend class Kernel;
   virtual Driver* allocate() = 0;
 public:
-  virtual const char* name() = 0;
+  virtual const char* driverName() = 0;
 };
 
 // device mandatory parameters

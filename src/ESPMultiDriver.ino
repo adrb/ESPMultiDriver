@@ -15,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "definitions.h"
+#include "ESPMultiDriver.h"
 
 Kernel *kernel = &Kernel::getInstance();  // create Kernel object
 
@@ -29,18 +29,14 @@ void setup() {
   Serial.setDebugOutput(true);
 
   // Register all known device drivers
-  KernelDriver::Allocator *kernelAlloc = new KernelDriver::Allocator;
-  kernel->registerDriverAllocator(kernelAlloc);  // kernel event responder
-  WiFiAPDriver::Allocator *wifiapAlloc = new WiFiAPDriver::Allocator;
-  kernel->registerDriverAllocator(wifiapAlloc);  // WiFi AP
-  HttpdDriver::Allocator *httpdAlloc = new HttpdDriver::Allocator;
-  kernel->registerDriverAllocator(httpdAlloc);  // Web Server
+  kernel->registerDriverAllocator(new KernelDriver::Allocator);  // kernel event responder
+  kernel->registerDriverAllocator(new WiFiAPDriver::Allocator);  // WiFi AP
+  kernel->registerDriverAllocator(new HttpdDriver::Allocator);  // Web Server
 
-  // Not mandatory drivers
-  TcpdDriver::Allocator *tcpdAlloc = new TcpdDriver::Allocator;
-  kernel->registerDriverAllocator(tcpdAlloc);  // TCP Server
-  DCMotor::Allocator *dcmotorAlloc = new DCMotor::Allocator;
-  kernel->registerDriverAllocator(dcmotorAlloc);
+  // Register not mandatory drivers
+  kernel->registerDriverAllocator(new TcpdDriver::Allocator);
+  kernel->registerDriverAllocator(new DCMotorDriver::Allocator);
+  kernel->registerDriverAllocator(new PinDriver::Allocator);
 
   // initialize Kernel
   if ( !kernel->begin() ) {
@@ -48,12 +44,11 @@ void setup() {
   }
 
   // create mandatory devices in case someone disabled them
-  kernel->createDevice(kernelAlloc->name(), kernelAlloc->name());
-  kernel->createDevice(wifiapAlloc->name(), wifiapAlloc->name());
-  kernel->createDevice(httpdAlloc->name(), httpdAlloc->name());
+  kernel->createDevice(KERNEL_NAME, KERNEL_NAME);
+  kernel->createDevice(WIFIAP_NAME, WIFIAP_NAME);
+  kernel->createDevice(HTTPD_NAME, HTTPD_NAME);
 
   kernel->autoloadDevices();
-
 }
 
 void loop() {

@@ -24,7 +24,7 @@
 
 #include "DriverEvent.h"
 
-#define DRIVER_KERNEL_ALOCNAME "kernel"
+static const char KERNEL_NAME[] = "kernel";
 
 // Handles events for Kernel class
 class KernelDriver : public Driver {
@@ -39,7 +39,7 @@ public:
   class Allocator : public DriverAllocator {
     Driver* allocate() { return new KernelDriver; }
   public:
-    const char* name() override final { static const char* fname = DRIVER_KERNEL_ALOCNAME; return fname; }
+    const char* driverName() override final { return KERNEL_NAME; }
   };
   ~KernelDriver() {};
 

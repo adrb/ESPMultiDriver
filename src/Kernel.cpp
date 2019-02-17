@@ -21,7 +21,7 @@ std::list<DriverAllocator*>::iterator Kernel::findAllocator(const char* name) {
 
   std::list<DriverAllocator*>::iterator it;
   for ( it = allocators.begin() ; it != allocators.end() ; it++ ) {
-    if ( !strcmp((*it)->name(), name) ) break;
+    if ( !strcmp((*it)->driverName(), name) ) break;
   }
 
   return it;
@@ -39,7 +39,7 @@ std::map<String, Driver*>::iterator Kernel::findDevice(String name) {
 
 bool Kernel::registerDriverAllocator(DriverAllocator* allocator) {
 
-  const char* allocName = allocator->name();
+  const char *allocName = allocator->driverName();
 
   if ( findAllocator(allocName) != allocators.end() ) {
     DEBUG_SERIAL("Driver allocator \"%s\" already registered!\n", allocName);
@@ -263,7 +263,7 @@ void Kernel::processEvents() {
 bool Kernel::run() {
 
   // initiate restart when KernelDriver isn't running
-  Driver *kernelDriver = getDevice(DRIVER_KERNEL_ALOCNAME);
+  Driver *kernelDriver = getDevice(KERNEL_NAME);
   if ( !kernelDriver || kernelDriver->getStatus() != Driver::RUNNING ) {
     DEBUG_SERIAL("KernelDriver not running!\n");
     return false;

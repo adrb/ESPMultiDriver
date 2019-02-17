@@ -28,11 +28,10 @@ bool KernelDriver::listAllocators(JsonObject& json) {
   Kernel *kernel = &Kernel::getInstance();
   JsonArray& jsonArray = json.createNestedArray(F("drivers"));
 
-
   // enumerate registered device allocators
   std::list<DriverAllocator*>::iterator it;
   for ( it = kernel->allocators.begin() ; it != kernel->allocators.end() ; it++ ) {
-    jsonArray.add((*it)->name());
+    jsonArray.add((*it)->driverName());
   }
 
 return true;
