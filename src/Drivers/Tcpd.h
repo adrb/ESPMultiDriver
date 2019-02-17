@@ -23,7 +23,7 @@
 #include <ESPAsyncTCP.h>
 #include "DriverEvent.h"
 
-static const char TCPD_NAME[] = "pin";
+static const char TCPD_NAME[] = "tcpd";
 
 class TcpdDriver : public Driver {
   friend class DriverAllocator;
