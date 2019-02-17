@@ -24,7 +24,7 @@
 
 #define DRIVER_DCMOTOR_ALOCNAME "dcmotor"
 
-class DCMotor : public Driver {
+class DCMotorDriver : public Driver {
   friend class DriverAllocator;
 
   uint8_t pin0;
@@ -32,17 +32,17 @@ class DCMotor : public Driver {
   int currentSpeed;   // negative number means rotation in opposite direction
   unsigned long lastCmdTime;
 
-  DCMotor(); // only DriverAllocator can create driver object
+  DCMotorDriver(); // only DriverAllocator can create driver object
   void stopMotor();
   void setSpeed(int speed);  // change current speed
 
 public:
   class Allocator : public DriverAllocator {
-    Driver* allocate() { return new DCMotor; }
+    Driver* allocate() { return new DCMotorDriver; }
   public:
     const char* name() override final { static const char* fname = DRIVER_DCMOTOR_ALOCNAME; return fname; }
   };
-  ~DCMotor() {};
+  ~DCMotorDriver() {};
 
   bool begin();
   bool run();

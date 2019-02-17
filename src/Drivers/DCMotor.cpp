@@ -17,14 +17,14 @@
 
 #include "definitions.h"
 
-DCMotor::DCMotor() {
+DCMotorDriver::DCMotorDriver() {
 
   // initialize driver parameters
   params.set("pin0", "0");
   params.set("pin1", "0");
 }
 
-bool DCMotor::begin() {
+bool DCMotorDriver::begin() {
 
   pin0 = params.getInt("pin0");
   pin1 = params.getInt("pin1");
@@ -41,13 +41,13 @@ bool DCMotor::begin() {
   return true;
 }
 
-void DCMotor::stopMotor() {
+void DCMotorDriver::stopMotor() {
   analogWrite(pin0, PWMRANGE);
   analogWrite(pin1, PWMRANGE);
   currentSpeed = 0;
 }
 
-void DCMotor::setSpeed(int speed) {
+void DCMotorDriver::setSpeed(int speed) {
 
   // don't change motor speed too often
   if ( (millis() - lastCmdTime) < DCMOTOR_SPEED_CHANGE_FREQ ) return;
@@ -65,12 +65,12 @@ void DCMotor::setSpeed(int speed) {
   currentSpeed = speed;
 }
 
-void DCMotor::end() {
+void DCMotorDriver::end() {
   setStatus(STOPPED);
   stopMotor();
 }
 
-bool DCMotor::run() {
+bool DCMotorDriver::run() {
 
   // lost connection? stop the motor
   if ( (millis() - lastCmdTime) > (DCMOTOR_SPEED_CHANGE_FREQ * 10) ) {
@@ -80,7 +80,7 @@ bool DCMotor::run() {
 return true;
 }
 
-bool DCMotor::handleEvent(DriverEventString *event) {
+bool DCMotorDriver::handleEvent(DriverEventString *event) {
 
   if ( event->getEventName() == F("speed") ) {
     int newSpeed = event->getString().toInt();
@@ -93,7 +93,7 @@ bool DCMotor::handleEvent(DriverEventString *event) {
 return false;
 }
 
-bool DCMotor::handleEvent(DriverEventJson *event) {
+bool DCMotorDriver::handleEvent(DriverEventJson *event) {
 
   JsonObject& json = event->getJsonObj();
 
