@@ -24,10 +24,9 @@ static const char PIN_NAME[] = "pin";
 
 class PinDriver : public Driver {
   friend class DriverAllocator;
+  PinDriver(); // only DriverAllocator can create driver object
 
   uint8_t pin;
-
-  PinDriver(); // only DriverAllocator can create driver object
 public:
   class Allocator : public DriverAllocator {
     Driver* allocate() { return new PinDriver; }
@@ -35,6 +34,10 @@ public:
     const char* driverName() override final { return PIN_NAME; }
   };
   ~PinDriver() {};
+
+  bool begin();
+  bool handleEvent(DriverEventString *event);
+  bool handleEvent(DriverEventJson *event);
 };
 
 #endif
