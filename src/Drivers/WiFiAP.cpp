@@ -20,8 +20,8 @@
 WiFiAPDriver::WiFiAPDriver() {
 
   //WiFi.persistent(false);  // don't store wifi configuration
-  ESP.eraseConfig();
-  WiFi.setAutoConnect(0);  // it seems that it's causing problems
+  //ESP.eraseConfig();
+  //WiFi.setAutoConnect(0);  // it seems that it's causing problems
   WiFi.disconnect(true);   // sdk can setup wifi before running sketch, so disable it
 
   // set default params
