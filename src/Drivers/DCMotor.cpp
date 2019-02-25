@@ -73,7 +73,7 @@ void DCMotorDriver::end() {
 bool DCMotorDriver::run() {
 
   // lost connection? stop the motor
-  if ( (millis() - lastCmdTime) > (DCMOTOR_SPEED_CHANGE_FREQ * 10) ) {
+  if ( (millis() - lastCmdTime) > (DCMOTOR_SPEED_CHANGE_FREQ * 2) ) {
     stopMotor();
   }
 
