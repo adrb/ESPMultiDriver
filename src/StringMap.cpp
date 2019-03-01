@@ -138,6 +138,7 @@ bool StringMap::updateMap(fs::FS &fs, const char* filename) {
   // buffer to be mutable. If you don't use ArduinoJson, you may as well
   // use configFile.readString instead.
   configFile.readBytes(buf.get(), size);
+  DEBUG_SERIAL("%s ---> %s\n", filename, buf.get());
 
   DynamicJsonBuffer jsonBuffer;
   JsonObject& json = jsonBuffer.parseObject(buf.get());
