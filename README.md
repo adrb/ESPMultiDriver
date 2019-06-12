@@ -7,6 +7,8 @@ and completly asynchrounous, which means ultra speed and responsiveness.
 It's also designed to facilitate implementation of new device drivers,
 and provides you with framework for fast and easy development.
 
+You can watch demo with polish subtitles [here](https://www.youtube.com/watch?v=_lr_p6fi5mk)
+
 ### Compilation and installation
 
 #### Preparation
