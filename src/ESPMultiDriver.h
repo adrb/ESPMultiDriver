@@ -18,7 +18,7 @@
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
-static const char EMD_VERSION[] = "1.0.1";
+static const char EMD_VERSION[] = "1.0.2";
 
 #define DEBUG_ESP_PORT Serial
 #define DEBUG_ESP_WIFI
