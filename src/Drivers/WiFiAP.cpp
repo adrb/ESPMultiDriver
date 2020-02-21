@@ -74,12 +74,12 @@ void WiFiAPDriver::end() {
 
 bool WiFiAPDriver::run() {
 
-  // blink twice, every 5sec if waiting for association
-  if (WiFi.softAPgetStationNum() == 0 && (millis() - ledTimer) > 5000) {
+  // blink every 5sec, once if waiting for association, otherwise twice
+  if ((millis() - ledTimer) > 5000) {
     ledTimer = millis();
 
     // send "led_on" event to "kernel" device
-    DriverEventInt *e = new DriverEventInt(KERNEL_NAME, F("led_on"), 2);
+    DriverEventInt *e = new DriverEventInt(KERNEL_NAME, F("led_on"), WiFi.softAPgetStationNum() == 0 ? 1 : 2);
     e->setTime(100);  // event will wait 100ms in queue
     if ( e->handle() != DriverEvent::QUEUED ) {
       DEBUG_SERIAL("Can't queue led_on event, status: %d\n", e->getStatus());
