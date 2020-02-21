@@ -36,7 +36,7 @@
 </div>
 <div data-role="content" class="ui-mini" style="height: 100vh;">
   <ul data-role="listview" data-inset="true">
-    <li><a href="#informations-page">Informations</a></li>
+    <li><a href="#information-page">Information</a></li>
     <li><a href="#devices-page">Devices</a></li>
     <li><a href="#restart-page">Restart</a></li>
   </ul>
@@ -47,11 +47,11 @@
 </div>
 </div>
 
-<div data-role="page" id="informations-page" data-cache="false">
+<div data-role="page" id="information-page" data-cache="false">
   <div data-role="header">
     <a href="#" data-rel="back" data-direction="reverse" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left ui-btn-a">Back</a>
-    <a href="#informations-page" name="refresh-page" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left ui-btn-a">Refresh</a>
-    <h1>Informations</h1>
+    <a href="#information-page" name="refresh-page" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left ui-btn-a">Refresh</a>
+    <h1>Information</h1>
   </div>
   <div data-role="content" class="ui-mini" style="height: 100vh;">
 
@@ -468,7 +468,7 @@ function RefreshDevicesTable() {
   });
 }
 
-$(document).on("pagebeforeshow","#informations-page", function() {
+$(document).on("pagebeforeshow","#information-page", function() {
   $(document).off("click", "[name='refresh-page']").on("click", "[name='refresh-page']", function () {
     refreshPage();
   });
