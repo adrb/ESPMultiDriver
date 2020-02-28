@@ -25,9 +25,9 @@ WiFiAPDriver::WiFiAPDriver() {
   WiFi.disconnect(true);   // sdk can setup wifi before running sketch, so disable it
 
   // set default params
-  params.set(DRIVER_PARAM_PASS, "");
-  params.set("ip", "192.168.0.1");
-  params.set("netmask", "255.255.255.0");
+  jconfig.set(DRIVER_PARAM_PASS, FSTR(""));
+  jconfig.set("ip", FSTR("192.168.0.1"));
+  jconfig.set("netmask", FSTR("255.255.255.0"));
 
 /*
   String ssid("EMD-");
@@ -36,32 +36,33 @@ WiFiAPDriver::WiFiAPDriver() {
   macaddr.remove(0,6);
   ssid += macaddr;
   */
-  String ssid("EMD-");
-  params.set("ssid", ssid  + String(ESP.getChipId()) );
+  jconfig.set("ssid", FSTR("EMD-") + String(ESP.getChipId()) );
 
   ledTimer = millis();
 }
 
 bool WiFiAPDriver::begin() {
 
+//  DEBUG_SERIAL("APconfig::begin --> %s/%s\n", jconfig.get("ip").as<String>().c_str(), jconfig.get("netmask").as<String>().c_str());
+
   IPAddress ip;
-  ip.fromString(params.get("ip"));
+  ip.fromString(jconfig.get(FCSTR("ip")).as<String>());
 
   IPAddress netmask;
-  netmask.fromString(params.get("netmask"));
+  netmask.fromString(jconfig.get(FCSTR("netmask")).as<String>());
 
-  String pass = params.get(DRIVER_PARAM_PASS);
+  String pass = jconfig.get(DRIVER_PARAM_PASS).as<String>();
 
   DEBUG_SERIAL("APconfig: %s/%s, ssid: %s, pass: %s\n",
     ip.toString().c_str(), netmask.toString().c_str(),
-    params.get(FCSTR("ssid")).c_str(), pass.c_str() );
+    jconfig.get(FCSTR("ssid")).as<String>().c_str(), pass.c_str() );
 
   wifi_set_phy_mode(PHY_MODE_11G);
   WiFi.mode(WIFI_AP);
 //WiFi.setOutputPower(10.0); // between 0 and 20.5 dbm
   WiFi.softAPConfig(ip, ip, netmask);
 
-  WiFi.softAP(params.get("ssid").c_str(), (pass != "" ? pass.c_str() : NULL), 1, false, 1);
+  WiFi.softAP(jconfig.get(FCSTR("ssid")).as<String>().c_str(), (pass != "" ? pass.c_str() : NULL), 1, false, 1);
   WiFi.printDiag(Serial);
 
   return true;
@@ -79,7 +80,7 @@ bool WiFiAPDriver::run() {
     ledTimer = millis();
 
     // send "led_on" event to "kernel" device
-    DriverEventInt *e = new DriverEventInt(KERNEL_NAME, F("led_on"), WiFi.softAPgetStationNum() == 0 ? 1 : 2);
+    DriverEventInt *e = new DriverEventInt(KERNEL_NAME, "led_on", WiFi.softAPgetStationNum() == 0 ? 1 : 2);
     e->setTime(100);  // event will wait 100ms in queue
     if ( e->handle() != DriverEvent::QUEUED ) {
       DEBUG_SERIAL("Can't queue led_on event, status: %d\n", e->getStatus());

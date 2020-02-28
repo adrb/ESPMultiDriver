@@ -116,10 +116,10 @@ bool DriverEventJson::handleDevice(Driver *device) {
   return device->handleEvent(this);
 }
 
-bool DriverEventExportParams::handleDevice(Driver *device) {
+bool DriverEventExportConfig::handleDevice(Driver *device) {
   return device->handleEvent(this);
 }
 
-bool DriverEventUpdateParams::handleDevice(Driver *device) {
+bool DriverEventUpdateConfig::handleDevice(Driver *device) {
   return device->handleEvent(this);
 }

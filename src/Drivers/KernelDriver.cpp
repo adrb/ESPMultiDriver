@@ -26,7 +26,7 @@ bool KernelDriver::begin() {
 bool KernelDriver::listAllocators(JsonObject& json) {
 
   Kernel *kernel = &Kernel::getInstance();
-  JsonArray& jsonArray = json.createNestedArray(F("drivers"));
+  JsonArray& jsonArray = json.createNestedArray("drivers");
 
   // enumerate registered device allocators
   std::list<DriverAllocator*>::iterator it;
@@ -46,7 +46,7 @@ bool KernelDriver::listDevices(JsonObject& json) {
   for ( it = kernel->devices.begin() ; it != kernel->devices.end() ; it++ ) {
 
     JsonObject& jsonObj = json.createNestedObject(it->first);
-    jsonObj[DRIVER_PARAM_TYPE] = it->second->getParam(DRIVER_PARAM_TYPE);
+    jsonObj[DRIVER_PARAM_TYPE] = it->second->getParam(DRIVER_PARAM_TYPE).as<String>();
     jsonObj[DRIVER_PARAM_STATE] = (int)it->second->getStatus();
   }
 
@@ -63,15 +63,13 @@ bool KernelDriver::listDevices(JsonObject& json) {
     jsonObj[DRIVER_PARAM_STATE] = (int)Driver::DISABLED;
 
     // load device type parameter from config file
-    StringMap deviceParams;
-    deviceParams.set(DRIVER_PARAM_TYPE,"");
-
-    if ( !deviceParams.updateMap(SPIFFS, dir.fileName().c_str()) ) {
+    JsonConfig devConfig;
+    if ( !devConfig.load(SPIFFS, dir.fileName().c_str()) ) {
       DEBUG_SERIAL("Failed to load: %s\n", dir.fileName().c_str());
       continue;
     }
 
-    String deviceType = deviceParams.get(DRIVER_PARAM_TYPE);
+    String deviceType = devConfig.get(DRIVER_PARAM_TYPE).as<String>();
     if ( deviceType == "" ) continue;
 
     jsonObj[DRIVER_PARAM_TYPE] = deviceType;
@@ -142,7 +140,7 @@ bool KernelDriver::handleEvent(DriverEventInt *event)  {
 
     //DEBUG_SERIAL("led_off: %d\n", event->getInt() );
 
-    DriverEventInt *e = new DriverEventInt(params.get(DRIVER_PARAM_NAME), F("led_off"), event->getInt());
+    DriverEventInt *e = new DriverEventInt(jconfig.get(DRIVER_PARAM_NAME).as<String>(), "led_off", event->getInt());
     e->setTime(100);  // event will wait 100ms in queue
 
     if ( e->handle() != DriverEvent::QUEUED ) {
@@ -159,7 +157,7 @@ bool KernelDriver::handleEvent(DriverEventInt *event)  {
     int blinkNum = event->getInt() - 1;
     if ( blinkNum <= 0 ) return true;
 
-    DriverEventInt *e = new DriverEventInt(params.get(DRIVER_PARAM_NAME), F("led_on"), blinkNum);
+    DriverEventInt *e = new DriverEventInt(jconfig.get(DRIVER_PARAM_NAME).as<String>(), "led_on", blinkNum);
     e->setTime(100);  // event will wait 100ms in queue
     if ( e->handle() != DriverEvent::QUEUED ) {
       DEBUG_SERIAL("Can't queue led_on event, status: %d\n", e->getStatus());

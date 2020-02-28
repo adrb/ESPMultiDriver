@@ -20,14 +20,14 @@
 DCMotorDriver::DCMotorDriver() {
 
   // initialize driver parameters
-  params.set("pin0", "0");
-  params.set("pin1", "0");
+  jconfig.set("pin0", 0);
+  jconfig.set("pin1", 0);
 }
 
 bool DCMotorDriver::begin() {
 
-  pin0 = params.getInt("pin0");
-  pin1 = params.getInt("pin1");
+  pin0 = jconfig.get("pin0").as<int>();
+  pin1 = jconfig.get("pin1").as<int>();
 
   if (pin0 == pin1) return false;
 

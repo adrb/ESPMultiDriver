@@ -20,12 +20,12 @@
 Kernel *kernel = &Kernel::getInstance();  // create Kernel object
 
 void setup() {
-  //ESP.eraseConfig();
-  //ESP.reset();
+  ESP.eraseConfig();
+//  ESP.reset();
 
   Serial.begin(115200);
   Serial.println();
-  Serial.println(F("ESPMultiDriver..."));
+  Serial.println(FSTR("ESPMultiDriver ver. ") + String(EMD_VERSION));
   Serial.setDebugOutput(true);
 
   // Register all known device drivers

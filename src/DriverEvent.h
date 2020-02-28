@@ -130,16 +130,16 @@ public:
   void setJsonObj(JsonVariant srcJsonV);
 };
 
-class DriverEventExportParams : public DriverEventJson {
+class DriverEventExportConfig : public DriverEventJson {
   bool handleDevice(Driver *device) override;
 public:
-  DriverEventExportParams(String dstDevice) : DriverEventJson(dstDevice) {}
+  DriverEventExportConfig(String dstDevice) : DriverEventJson(dstDevice) {}
 };
 
-class DriverEventUpdateParams : public DriverEventJson {
+class DriverEventUpdateConfig : public DriverEventJson {
   bool handleDevice(Driver *device) override;
 public:
-  DriverEventUpdateParams(String dstDevice) : DriverEventJson(dstDevice) {}
+  DriverEventUpdateConfig(String dstDevice) : DriverEventJson(dstDevice) {}
 };
 
 #endif

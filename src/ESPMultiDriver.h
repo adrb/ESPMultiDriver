@@ -18,7 +18,7 @@
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
-static const char EMD_VERSION[] = "1.0.2";
+static const char EMD_VERSION[] = "1.0.3";
 
 #define DEBUG_ESP_PORT Serial
 #define DEBUG_ESP_WIFI
@@ -49,7 +49,7 @@ extern "C" {
 #define FCSTR(_pmem) ( String(F(_pmem)).c_str() )
 
 #include "Utils.h"
-#include "StringMap.h"
+#include "JsonConfig.h"
 #include "DriverEvent.h"
 #include "Driver.h"
 #include "Kernel.h"

@@ -20,16 +20,16 @@
 PinDriver::PinDriver() {
 
   // initialize driver parameters
-  params.set("pin", "255");
-  params.set("output", "1");
+  jconfig.set("pin", 255);
+  jconfig.set("output", 1);
 }
 
 bool PinDriver::begin() {
 
-  pin = params.getInt("pin");
+  pin = jconfig.get(FCSTR("pin")).as<int>();
   if ( pin < 0 || pin > 16 ) return false;
 
-  if ( (bool)params.getInt("output") ) {
+  if ( (bool)jconfig.get(FCSTR("output")).as<int>() ) {
     pinMode(pin, OUTPUT);
   } else {
     pinMode(pin, INPUT);
@@ -86,7 +86,7 @@ bool PinDriver::handleEvent(DriverEventJson *event) {
   }
 
   if ( event->getEventName() == F("analogRead") ) {
-    json[F("value")] = (signed int)analogRead(pin);
+    json["value"] = (signed int)analogRead(pin);
     return true;
   }
 

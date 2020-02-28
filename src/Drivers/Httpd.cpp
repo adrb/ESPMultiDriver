@@ -47,21 +47,21 @@ bool HttpdDriver::begin() {
 
     // curl -H "Content-Type: application/json" -X POST --data '{"event":"get_params","device":"wifiap","params":{}}' "http://192.168.0.1/api" -si
     if ( eventName == F("get_params") ) {
-      DriverEventExportParams exportParams(deviceName);
-      if ( exportParams.handle() != DriverEvent::SUCCESS )
+      DriverEventExportConfig exportConfig(deviceName);
+      if ( exportConfig.handle() != DriverEvent::SUCCESS )
         response->setCode(500);
       else
-        exportParams.getJsonObj().printTo(*response);
+        exportConfig.getJsonObj().printTo(*response);
       request->send(response);
       return;
     }
 
     // curl -H "Content-Type: application/json" -X POST --data '{"event":"set_params","device":"wifiap","params":{"pass":"12345678"}}' "http://192.168.0.1/api" -si
     if ( eventName == F("set_params") ) {
-      DriverEventUpdateParams updateParams(deviceName);
-      updateParams.setJsonObj(jsonParams);
+      DriverEventUpdateConfig updateConfig(deviceName);
+      updateConfig.setJsonObj(jsonParams);
 
-      if ( updateParams.handle() != DriverEvent::SUCCESS ) {
+      if ( updateConfig.handle() != DriverEvent::SUCCESS ) {
         response->setCode(500);
       } else {
         response->setCode(200);

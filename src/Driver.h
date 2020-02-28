@@ -20,9 +20,9 @@
 
 #include <ArduinoJson.h>
 #include <ESPAsyncWebServer.h>
+#include "JsonConfig.h"
 #include "DriverEvent.h"
 
-class StringMap;
 class Driver;
 
 class DriverAllocator {
@@ -51,7 +51,7 @@ public:
   enum DriverStatus { RUNNING, STOPPED, DISABLED };
 
 protected:
-  StringMap params;
+  JsonConfig jconfig;
   DriverStatus status;
 
   Driver();
@@ -66,7 +66,7 @@ protected:
 public:
   virtual ~Driver();    // virtual - you should also call destructors for derived classes
   DriverStatus getStatus() { return status; };
-  String getParam(String paramName);
+  JsonVariant getParam(const char* name);
   bool saveConfig();
   bool deleteConfig();
 
@@ -80,8 +80,8 @@ public:
   virtual bool handleEvent(DriverEventStop *event);
   virtual bool handleEvent(DriverEventStart *event);
   virtual bool handleEvent(DriverEventDisable *event);
-  bool handleEvent(DriverEventExportParams *event); // export parameters to Json
-  bool handleEvent(DriverEventUpdateParams *event); // update parameters from Json
+  bool handleEvent(DriverEventExportConfig *event); // export parameters to Json
+  bool handleEvent(DriverEventUpdateConfig *event); // update parameters from Json
 };
 
 #endif

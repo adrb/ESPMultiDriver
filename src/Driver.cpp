@@ -27,11 +27,11 @@ Driver::~Driver() {
 
 void Driver::setStatus( Driver::DriverStatus _status ) {
   status = _status;
-  params.set(DRIVER_PARAM_STATE, (int)_status);
+  jconfig.set(DRIVER_PARAM_STATE, (int)_status);
 }
 
-String Driver::getParam(String paramName) {
-  return params.get(paramName.c_str());
+JsonVariant Driver::getParam(const char* name) {
+  return jconfig.get(name);
 }
 
 bool Driver::begin() {
@@ -50,17 +50,20 @@ void Driver::end() {
 }
 
 String Driver::configFileName() {
-  return FSTR("/dev/") + params.get(DRIVER_PARAM_NAME) + FSTR(".json");
+  return FSTR("/dev/") + jconfig.get(DRIVER_PARAM_NAME).as<String>() + FSTR(".json");
 }
 
 bool Driver::loadConfig() {
-  bool ret = params.updateMap(SPIFFS, configFileName().c_str());
-  status = (DriverStatus)params.getInt(DRIVER_PARAM_STATE); // update device status
-  return ret;
+  bool ret = jconfig.load(SPIFFS, configFileName().c_str());
+
+  // update device status
+  status = (DriverStatus) jconfig.get(DRIVER_PARAM_STATE).as<int>();
+
+return ret;
 }
 
 bool Driver::saveConfig() {
-  return params.exportMap(SPIFFS, configFileName().c_str());
+  return jconfig.save(SPIFFS, configFileName().c_str());
 }
 
 bool Driver::deleteConfig() {
@@ -68,14 +71,14 @@ bool Driver::deleteConfig() {
 }
 
 bool Driver::handleEvent(DriverEventStop *event)  {
-  if ( getStatus() != Driver::RUNNING ) return false;
+  if ( getStatus() != RUNNING ) return false;
   end();
 return true;
 }
 
 bool Driver::handleEvent(DriverEventStart *event)  {
-  if ( getStatus() != Driver::RUNNING && begin() ) {
-    setStatus(Driver::RUNNING);
+  if ( getStatus() != RUNNING && begin() ) {
+    setStatus(RUNNING);
     saveConfig();
     return true;
   }
@@ -83,18 +86,18 @@ return false;
 }
 
 bool Driver::handleEvent(DriverEventDisable *event) {
-  if ( getStatus() == Driver::RUNNING ) end();
-  setStatus(Driver::DISABLED);
+  if ( getStatus() == RUNNING ) end();
+  setStatus(DISABLED);
   if ( !saveConfig() ) return false;
 return true;
 }
 
-bool Driver::handleEvent(DriverEventExportParams *event) {
-  params.exportMap(event->getJsonObj());
+bool Driver::handleEvent(DriverEventExportConfig *event) {
+  jconfig.save(event->getJsonObj());
   return true;
 }
 
-bool Driver::handleEvent(DriverEventUpdateParams *event) {
+bool Driver::handleEvent(DriverEventUpdateConfig *event) {
 
   JsonObject& json = event->getJsonObj();
 
@@ -113,7 +116,7 @@ bool Driver::handleEvent(DriverEventUpdateParams *event) {
     json.remove(DRIVER_PARAM_STATE);
   }
 
-  params.updateMap(json);
-  if ( !saveConfig() ) return false;
-  return true;
+  jconfig.load(json);
+
+return saveConfig();
 }

@@ -81,11 +81,11 @@ bool Kernel::createDevice(String allocatorName, String deviceName, bool force) {
   }
 
   // device mandatory parameters
-  dev->params.set(DRIVER_PARAM_NAME, deviceName);
-  dev->params.set(DRIVER_PARAM_TYPE, allocatorName);
+  dev->jconfig.set(DRIVER_PARAM_NAME, deviceName);
+  dev->jconfig.set(DRIVER_PARAM_TYPE, allocatorName);
   dev->setStatus(Driver::STOPPED);
 
-  // update parameters from config file
+  // load parameters from config file
   dev->loadConfig();
 
   if ( force ) dev->setStatus(Driver::RUNNING);
@@ -303,25 +303,25 @@ void Kernel::autoloadDevices() {
 
   Dir dir = SPIFFS.openDir(F("/dev/"));
   while (dir.next()) {
-    StringMap deviceParams;
+    JsonConfig devConfig;
 
-    // initialize parameters to be updated from config file
-    deviceParams.set(DRIVER_PARAM_NAME,"");
-    deviceParams.set(DRIVER_PARAM_TYPE,"");
-
-    if ( !deviceParams.updateMap(SPIFFS, dir.fileName().c_str()) ) {
+    if ( !devConfig.load(SPIFFS, dir.fileName().c_str()) ) {
       DEBUG_SERIAL("Failed to load: %s\n", dir.fileName().c_str());
       continue;
     }
 
-    String deviceName = deviceParams.get(DRIVER_PARAM_NAME);
-    String deviceType = deviceParams.get(DRIVER_PARAM_TYPE);
+    String deviceName = devConfig.get(DRIVER_PARAM_NAME);
+    String deviceType = devConfig.get(DRIVER_PARAM_TYPE);
 
     if (deviceName == "" || deviceType == "") continue;
 
-    DEBUG_SERIAL("Autoloading device \"%s\" (type: \"%s\") from file: %s\n",
-      deviceName.c_str(), deviceType.c_str(), dir.fileName().c_str());
+    if ( createDevice(deviceType.c_str(), deviceName, false) ) {
+      DEBUG_SERIAL("Created");
+    } else {
+      DEBUG_SERIAL("Can't create");
+    }
 
-    createDevice(deviceType.c_str(), deviceName, false);
+    DEBUG_SERIAL(" device \"%s\" (type: \"%s\") from: %s\n\n",
+      deviceName.c_str(), deviceType.c_str(), dir.fileName().c_str());
   }
 }
