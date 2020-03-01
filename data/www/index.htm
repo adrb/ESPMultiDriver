@@ -5,7 +5,7 @@
   <meta name="viewport" content="width = device-width, initial-scale = 1">
   <link rel="stylesheet" type="text/css" href="jq.m-1.4.5.css">
   <style type='text/css'>
-    @media only screen and (min-width: 500px){
+    @media only screen and (min-width: 300px){
       .ui-page {
         width: 500px !important;
           margin: 0 auto !important;
@@ -363,9 +363,9 @@ function PopulateDevicesTable(devlist) {
 
    devicesTableBody += `
 </td>
-<td style="vertical-align:middle;">
+<td style="vertical-align:top;">
 <span style="position:relative;">
-<div data-role="collapsible" class="ui-alt-icon ui-nodisc-icon" style="z-index: `+ zIndex +`; position:absolute;left:0;top:-100%;"
+<div data-role="collapsible" class="ui-alt-icon ui-nodisc-icon" style="z-index: `+ zIndex +`; position:absolute;left:0;top:0; margin: 0 0;"
 data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true">
 <h5>Select action</h5>
 <ul class="ui-shadow" data-role="listview">
